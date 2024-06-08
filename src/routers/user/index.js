@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const userModel = require("../../models/user.model");
 
+nhu cai cc haha
 // Create User
 router.post("/create-user", (req, res) => {
   const { name, email, password } = req.body;
