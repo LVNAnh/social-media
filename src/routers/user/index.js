@@ -1,15 +1,15 @@
 const express = require("express");
 const router = express.Router();
 const userModel = require("../../models/user.model");
-const UserController = require("../../controllers/user.controller");
 
 // Create User
 router.post("/create-user", (req, res) => {
-  const { name, email } = req.body;
+  const { name, email, password } = req.body;
 
   const user = new userModel({
     name,
     email,
+    password,
   });
 
   user
@@ -51,10 +51,10 @@ router.get("/get-all-users", (req, res) => {
 // Update User
 router.put("/update-user/:id", (req, res) => {
   const { id } = req.params;
-  const { name, email } = req.body;
+  const { name, email, password } = req.body;
 
   userModel
-    .findByIdAndUpdate(id, { name, email }, { new: true })
+    .findByIdAndUpdate(id, { name, email, password }, { new: true })
     .then((user) => {
       res.send(user);
     })
