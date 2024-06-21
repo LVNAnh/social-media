@@ -64,21 +64,25 @@ router.put("/update-user/:id", (req, res) => {
 });
 
 // Delete User
-router.delete("/delete-user/:id", (req, res) => {
+router.delete("/delete-user/:id", async (req, res) => {
   const { id } = req.params;
 
-  userModel
-    .findByIdAndDelete(id)
-    .then(() => {
-      res.send("User Deleted");
-    })
-    .catch((err) => {
-      res.status(500).send({ error: "Failed to delete user", details: err });
-    });
-});
+  try {
+    // Tìm người dùng và xóa
+    const deletedUser = await userModel.findByIdAndDelete(id);
 
-router.get("/test", (req, res) => {
-  res.send("test");
+    if (!deletedUser) {
+      return res.status(404).send({ error: "User not found" });
+    }
+
+    // Xóa tất cả các bài đăng của người dùng
+    await postModel.deleteMany({ author: id });
+
+    res.send("User and associated posts deleted successfully");
+  } catch (error) {
+    console.error("Error deleting user:", error);
+    res.status(500).send(error);
+  }
 });
 
 module.exports = router;
