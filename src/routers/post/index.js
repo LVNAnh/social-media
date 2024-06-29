@@ -22,7 +22,9 @@ router.post("/create-post", (req, res) => {
       );
     })
     .then((updatedUser) => {
-      res.send("Post Created and User Updated");
+      res.send(
+        "Bài đăng đã được tạo và người dùng đã được cập nhật vào bài viết"
+      );
     })
     .catch((err) => {
       res.status(500).send(err);
@@ -74,10 +76,10 @@ router.put("/update-post/:postId", (req, res) => {
     .findOne({ _id: postId, author: currentAuthorId })
     .then((post) => {
       if (!post) {
-        console.log("Post not found or not authorized");
-        return res
-          .status(404)
-          .send({ error: "Post not found or not authorized" });
+        console.log("Bài đăng không tồn tại hoặc bạn không được cấp quyền");
+        return res.status(404).send({
+          error: "Bài đăng không tồn tại hoặc bạn không được cấp quyền",
+        });
       }
 
       console.log("Found post:", post);
@@ -94,11 +96,11 @@ router.put("/update-post/:postId", (req, res) => {
       return post.save();
     })
     .then((updatedPost) => {
-      console.log("Post updated successfully:", updatedPost);
+      console.log("Bài đăng được cập nhật thành công:", updatedPost);
       res.send(updatedPost);
     })
     .catch((err) => {
-      console.error("Error updating post:", err);
+      console.error("Thất bại cập nhật bài đăng:", err);
       res.status(500).send(err);
     });
 });
@@ -117,7 +119,7 @@ router.delete("/delete-post/:id", (req, res) => {
       );
     })
     .then(() => {
-      res.send("Post Deleted");
+      res.send("Bài đăng đã bị xóa");
     })
     .catch((err) => {
       res.status(500).send(err);
